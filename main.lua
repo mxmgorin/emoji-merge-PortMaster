@@ -2,7 +2,7 @@ require 'anchor'
 
 --{{{ init
 function init()
-  main:init{title = 'emoji merge', theme = 'twitter_emoji', w = 640, h = 360, sx = 2, sy = 2}
+  main:init{title = 'emoji merge', theme = 'twitter_emoji', w = 640, h = 360}
   main:set_icon('assets/sunglasses_icon.png')
 
   bg, bg_fixed, game1, game2, game3, effects, ui1, ui2, shadow = layer(), layer({fixed = true}), layer(), layer(), layer(), layer(), layer({fixed = true}), layer({fixed = true}), layer({x = 4*main.sx, y = 4*main.sy, shadow = true})
@@ -227,8 +227,11 @@ function init()
 
   if not main.web then
     main.screen_button = emoji_button(78, main.h - 20, {emoji = 'screen', w = 18, action = function(self)
+      if main.device_state.preserve_aspect then main.device_state.preserve_aspect = false else main.device_state.preserve_aspect = true end
+      main:setScaling(main.device_state.preserve_aspect)
       sounds.button_press:sound_play(0.5, main:random_float(0.95, 1.05))
-      main:resize_up(0.5)
+      main:save_state()
+      --main:resize_up(0.5)
     end})
   end
   main.close_button = emoji_button(main.w - 20, 20, {emoji = 'close', w = 18, action = function(self)
@@ -351,7 +354,8 @@ function main:draw_all_layers_to_main_layer()
   effects:layer_draw_to_canvas('outline', function() effects:layer_draw('main', 0, 0, 0, 1, 1, colors.white[0], shaders.outline) end)
   ui2:layer_draw_to_canvas('outline', function() ui2:layer_draw('main', 0, 0, 0, 1, 1, colors.white[0], shaders.outline) end)
 
-  main:layer_draw_to_canvas(main.canvas, function() 
+  main:layer_draw_to_canvas(main.canvas, function()
+    love.graphics.translate(main.rx,main.ry)
     bg:layer_draw()
     bg_fixed:layer_draw()
     shadow.x, shadow.y = 4*main.sx, 4*main.sy

@@ -17,7 +17,7 @@ require 'anchor.class'
 --   function timer()
 --     return anchor():timer_init()
 --   end
--- And what this does is simply create a new anchor object, and then initialize it as a timer by calling the timer_init function. 
+-- And what this does is simply create a new anchor object, and then initialize it as a timer by calling the timer_init function.
 --
 -- When creating your own mixins, all methods should be prefixed by the unique name of the mixin. So if you look at the timer mixin, everything is prefixed by "timer_".
 -- This is due to the fact that all mixins are added by default to the anchor class, and so if their names collided then method definitions would overwrite each other, so unique names are necessary.
@@ -27,50 +27,87 @@ require 'anchor.class'
 -- For instance, the color mixin defines .r, .g, .b and .a as attributes. The transform mixin also defines the .r attribute (rotation).
 -- In this case, it's acceptable because in general color objects are never going to have transforms and thus the .r attribute confusion won't matter.
 anchor = class:class_new()
-function anchor:new(type, t) if t then for k, v in pairs(t) do self[k] = v end end; self.type = type end
-function anchor:anchor_init(type, t) if t then for k, v in pairs(t) do self[k] = v end end; self.type = type; return self end
+function anchor:new(type, t)
+  if t then for k, v in pairs(t) do self[k] = v end end; self.type = type
+end
+
+function anchor:anchor_init(type, t)
+  if t then for k, v in pairs(t) do self[k] = v end end; self.type = type; return self
+end
+
 function anchor:is(type) return self.type == type end
-function anchor:init(f) f(self); return self end
-function anchor:action(f) self.update = f; return self end
+
+function anchor:init(f)
+  f(self); return self
+end
+
+function anchor:action(f)
+  self.update = f; return self
+end
 
 anchor:class_add(require('anchor.animation'))
-function animation(delay, animation_frames, loop_mode, actions) return anchor('animation'):animation_init(delay, animation_frames, loop_mode, actions) end
+function animation(delay, animation_frames, loop_mode, actions)
+  return anchor('animation'):animation_init(delay,
+    animation_frames, loop_mode, actions)
+end
+
 anchor:class_add(require('anchor.animation_frames'))
-function animation_frames(filename, frame_w, frame_h, frames_list) return anchor('animation_frames'):animation_frames_init(filename, frame_w, frame_h, frames_list) end
+function animation_frames(filename, frame_w, frame_h, frames_list)
+  return anchor('animation_frames')
+      :animation_frames_init(filename, frame_w, frame_h, frames_list)
+end
+
 anchor:class_add(require('anchor.animation_logic'))
-function animation_logic(delay, size, loop_mode, actions) return anchor('animation_logic'):animation_logic_init(delay, size, loop_mode, actions) end
+function animation_logic(delay, size, loop_mode, actions)
+  return anchor('animation_logic'):animation_logic_init(delay,
+    size, loop_mode, actions)
+end
+
 anchor:class_add(require('anchor.area'))
 anchor:class_add(require('anchor.camera'))
 function camera(x, y, w, h) return anchor('camera'):shake_init():camera_init(x, y, w, h) end
+
 anchor:class_add(require('anchor.collider'))
 anchor:class_add(require('anchor.color'))
 function color(r, g, b, a) return anchor('color'):color_init(r, g, b, a) end
+
 anchor:class_add(require('anchor.color_ramp'))
 function color_ramp(color, step) return anchor('color_ramp'):color_ramp_init(color, step) end
+
 anchor:class_add(require('anchor.color_sequence'))
 anchor:class_add(require('anchor.contact'))
 function contact(c) return anchor('contact'):contact_init(c) end
+
 anchor:class_add(require('anchor.container'))
 function container() return anchor('container'):container_init() end
+
 anchor:class_add(require('anchor.duration'))
 anchor:class_add(require('anchor.flash'))
 function flash(duration) return anchor('flash'):flash_init(duration) end
+
 anchor:class_add(require('anchor.font'))
 function font(filename, font_size, hinting) return anchor('font'):font_init(filename, font_size, hinting) end
+
 anchor:class_add(require('anchor.gradient_image'))
 function gradient_image(direction, ...) return anchor('gradient_image'):gradient_image_init(direction, ...) end
+
 anchor:class_add(require('anchor.graph'))
 function graph() return anchor('graph'):graph_init() end
+
 anchor:class_add(require('anchor.grid'))
 function grid(w, h, v) return anchor('grid'):grid_init(w, h, v) end
+
 anchor:class_add(require('anchor.hitfx'))
 anchor:class_add(require('anchor.image'))
 function image(filename) return anchor('image'):image_init(filename) end
+
 anchor:class_add(require('anchor.input'))
 anchor:class_add(require('anchor.joint'))
 function joint(joint_type, ...) return anchor('joint'):joint_init(joint_type, ...):action(function(self, dt) end) end
+
 anchor:class_add(require('anchor.layer'))
 function layer(args) return anchor('layer', args):layer_init() end
+
 anchor:class_add(require('anchor.level'))
 anchor:class_add(require('anchor.music_player'))
 anchor:class_add(require('anchor.observer'))
@@ -78,24 +115,32 @@ anchor:class_add(require('anchor.physics_world'))
 anchor:class_add(require('anchor.prs'))
 anchor:class_add(require('anchor.quad'))
 function quad(source, x, y, w, h) return anchor('quad'):quad_init(source, x, y, w, h) end
+
 anchor:class_add(require('anchor.random'))
 function random(seed) return anchor('random'):random_init(seed) end
+
 anchor:class_add(require('anchor.shader'))
 function shader(vs, fs) return anchor('shader'):shader_init(vs, fs) end
+
 anchor:class_add(require('anchor.shake'))
 anchor:class_add(require('anchor.slow'))
 anchor:class_add(require('anchor.sound'))
 function sound(filename, args) return anchor('sound', args):sound_init(filename) end
+
 anchor:class_add(require('anchor.sound_tag'))
 function sound_tag(args) return anchor('sound_tag'):sound_tag_init(args) end
+
 anchor:class_add(require('anchor.spring'))
 function spring(x, k, d) return anchor('spring'):spring_init(x, k, d) end
+
 anchor:class_add(require('anchor.stats'))
 anchor:class_add(require('anchor.system'))
 anchor:class_add(require('anchor.text'))
 function text(text, args) return anchor('text'):text_init(text, args) end
+
 anchor:class_add(require('anchor.timer'))
 function timer() return anchor('timer'):timer_init() end
+
 anchor:class_add(require('anchor.vec2'))
 function vec2(x, y) return anchor('vec2'):vec2_init(x, y) end
 
@@ -116,90 +161,75 @@ main.time = 0
 main.step = 1
 main.frame = 1
 main.timescale = 1
-main.framerate = 60
+main.framerate = 30
 main.sleep = .001
 main.lag = 0
-main.rate = 1/60
-main.max_frame_skip = 25
+main.rate = 1 / 60
+main.max_frame_skip = 4
 
-main:container_init():input_init():level_init():music_player_init():observer_init():physics_world_init():random_init():shake_init():slow_init():system_init()
+main:container_init():input_init():level_init():music_player_init():observer_init():physics_world_init():random_init()
+    :shake_init():slow_init():system_init()
+
+function main:setScaling(preserve_aspect)
+  local desktop_w, desktop_h = love.window.getDesktopDimensions(main.display)
+  if preserve_aspect == nil then preserve_aspect = true end
+  local max_scaled_h = (desktop_h * 3) / 4
+
+  main.w, main.h = 640, 360
+  local sx = desktop_w/main.w
+  local sy = desktop_h/main.h
+  local min_scale = math.min(sx, sy)
+  local scaled_w = desktop_w
+  local scaled_h = desktop_h
+
+  if preserve_aspect then
+    scaled_w = main.w * min_scale
+    scaled_h = main.h * min_scale
+  elseif max_scaled_h < desktop_h and sx ~= sy then
+    scaled_h = max_scaled_h
+    sy = max_scaled_h/main.h
+  end
+
+  main.rx = math.floor((desktop_w - scaled_w) / 2)
+  main.ry = math.floor((desktop_h - scaled_h) / 2)
+
+  if preserve_aspect then
+    main.sx, main.sy = min_scale, min_scale
+  else
+    main.sx, main.sy = sx, sy
+  end
+end
 
 function main:init(args)
   args = args or {}
   main.title = args.title or 'No title'
   love.filesystem.setIdentity(main.title)
-  main.web = args.web
+  main.web = false
+  local _, _, flags = love.window.getMode()
+  main.display = flags.displayindex
 
-  if main.web then
-    main.game_state = {}
-    main.device_state = {}
-    love.graphics.setLineStyle('rough')
-    love.graphics.setDefaultFilter('nearest', 'nearest', 0)
-    main.w, main.h = args.w or 480, args.h or 270
-    main.sx, main.sy = args.sx or 1, args.sy or 1
-    main.rx, main.ry = 0, 0
-    main.framerate = 60
-    main.display = 1
-    main.borderless = false
-    main.resizable = false
-    love.window.setMode(main.w*main.sx, main.h*main.sy, {borderless = false, minwidth = main.w, minheight = main.h, resizable = true})
-    love.window.setTitle(main.title)
-    main:layer_init()
-    main.camera = camera(main.w/2, main.h/2)
-    main:save_state()
+  main:load_state()
+  love.graphics.setLineStyle('rough')
+  love.graphics.setDefaultFilter('nearest', 'nearest', 0)
+  local desktop_w, desktop_h = love.window.getDesktopDimensions(flags.displayindex)
+  if main.device_state == nil then main.device_state = {} end
+  if main.device_state.preserve_aspect == nil then main.device_state.preserve_aspect = true end
+  main:setScaling(main.device_state.preserve_aspect)
+  main.borderless = true
+  main.resizable = false
+  main:resize(desktop_w, desktop_h)
+  love.window.setMode(desktop_w, desktop_h)
+  love.window.setTitle(main.title)
+  main:layer_init()
+  main.camera = camera(main.w / 2, main.h / 2)
 
-  else
-    main:load_state()
-    if main.device_state.first_run then
-      love.graphics.setLineStyle('rough')
-      love.graphics.setDefaultFilter('nearest', 'nearest', 0)
-      main.w, main.h = args.w or 480, args.h or 270
-      main.sx, main.sy = args.sx or 1, args.sy or 1
-      main.rx, main.ry = 0, 0
-      local _, _, flags = love.window.getMode()
-      local desktop_w, desktop_h = love.window.getDesktopDimensions(flags.displayindex)
-      main.framerate = (flags.refreshrate == 0 and 60 or flags.refreshrate)
-      main.display = flags.displayindex
-      main.borderless = true
-      main.resizable = false
-      main:resize(main.w*main.sx, main.h*main.sy)
-      love.window.setMode(main.w*main.sx, main.h*main.sy, {borderless = true, minwidth = main.w, minheight = main.h, resizable = false})
-      love.window.setTitle(main.title)
-      main:layer_init()
-      main.camera = camera(main.w/2, main.h/2)
-    else
-      love.graphics.setLineStyle('rough')
-      love.graphics.setDefaultFilter('nearest', 'nearest', 0)
-      main.w, main.h = args.w or 480, args.h or 270
-      main.sx, main.sy = main.device_state.sx, main.device_state.sy
-      main.rx, main.ry = main.device_state.rx, main.device_state.ry
-      local _, _, flags = love.window.getMode()
-      main.framerate = main.device_state.framerate
-      main.display = main.device_state.display
-      main.borderless = main.device_state.borderless
-      main.resizable = main.device_state.resizable
-      love.window.setMode(main.w*main.sx, main.h*main.sy, {borderless = main.device_state.borderless, displayindex = main.device_state.display, minwidth = main.w, minheight = main.h, resizable = main.device_state.resizable})
-      love.window.setTitle(main.title)
-      main:layer_init()
-      main.camera = camera(main.w/2, main.h/2)
-    end
-    self:update_mode_and_set_window_state()
-  end
 
   self:set_theme(args.theme)
 end
 
 -- Resizes the game's canvas to the given width and height while maintaining the same aspect ratio.
 function main:resize(w, h)
-  if main.web then return end
-  if w/main.w == h/main.h then -- can multiply on x and y by the same value
-    main.rx, main.ry = 0, 0
-    main.sx, main.sy = w/main.w, h/main.h
-  else
-    local scale = math.min(w/main.w, h/main.h)
-    main.rx, main.ry = w-scale*main.w, h-scale*main.h -- remainder on both x and y to be used later for letterboxing
-    main.sx, main.sy = scale, scale
-  end
+
   self:update_mode_and_set_window_state()
 end
 
@@ -210,14 +240,14 @@ function main:resize_up(s)
   local sx, sy = main.sx + s or 1, main.sy + s or 1
   local _, _, flags = love.window.getMode()
   local wx, wy = love.window.getDesktopDimensions(flags.displayindex)
-  if main.w*sx > wx or main.h*sy > wy then sx, sy = 1, 1 end
-  main:resize(main.w*sx, main.h*sy)
+  if main.w * sx > wx or main.h * sy > wy then sx, sy = 1, 1 end
+  main:resize(main.w * sx, main.h * sy)
 end
 
 -- Redefine this function from game's side if needed for more complex layer drawing with shader effects and so on.
 function main:draw_all_layers_to_main_layer()
-  for _, layer in ipairs(main.layer_objects) do 
-    main:layer_draw_to_canvas('main', function() 
+  for _, layer in ipairs(main.layer_objects) do
+    main:layer_draw_to_canvas('main', function()
       layer:layer_draw_commands()
       layer:layer_draw()
     end)
@@ -228,8 +258,8 @@ function main:load_state()
   if main.web then return end
   main.device_state = main:load_table('device_state.txt')
   main.game_state = main:load_table('game_state.txt')
-  if not main.device_state then main.device_state = {first_run = true} end
-  if not main.game_state then main.game_state = {first_run = true} end
+  if not main.device_state then main.device_state = { first_run = true } end
+  if not main.game_state then main.game_state = { first_run = true } end
 end
 
 function main:save_state()
@@ -244,24 +274,13 @@ function main:update_mode_and_set_window_state()
   if main.web then return end
   local _, _, flags = love.window.getMode()
   local wx, wy = love.window.getDesktopDimensions(flags.displayindex)
-  if main.w*main.sx == wx and main.h*main.sy == wy then
-    main.borderless = true
-    main.resizable = false
-    main.logical_fullscreen = true
-  else
-    main.borderless = false
-    main.resizable = true
-    main.logical_fullscreen = false
-  end
+  main.borderless = false
+  main.resizable = false
+  main.logical_fullscreen = true
   main.display = flags.displayindex
-  love.window.updateMode(main.w*main.sx, main.h*main.sy, {borderless = main.borderless, resizable = main.resizable, displayindex = main.display})
+  love.window.updateMode(main.w * main.sx, main.h * main.sy,
+    { borderless = main.borderless, resizable = main.resizable, displayindex = main.display })
 
-  main.device_state.sx, main.device_state.sy = main.sx, main.sy
-  main.device_state.rx, main.device_state.ry = main.rx, main.ry
-  main.device_state.display = main.display
-  main.device_state.framerate = main.framerate
-  main.device_state.borderless = main.borderless
-  main.device_state.resizable = main.resizable
   main:save_state()
 end
 
@@ -355,15 +374,14 @@ function main:quit()
   love.event.quit()
 end
 
-
 function love.run()
   if init then init() end
   love.timer.step()
   local last_frame = 0
 
   return function()
-    main.dt = love.timer.step()*main.timescale
-    main.lag = math.min(main.lag + main.dt, main.rate*main.max_frame_skip)
+    main.dt = love.timer.step() * main.timescale
+    main.lag = math.min(main.lag + main.dt, main.rate * main.max_frame_skip)
 
     while main.lag >= main.rate do
       if love.event then
@@ -404,41 +422,51 @@ function love.run()
       end
 
       main.step = main.step + 1
-      main.time = main.time + main.rate*main.slow_amount
+      main.time = main.time + main.rate * main.slow_amount
 
       if main.steam then main.steam.runCallbacks() end
       for _, layer in ipairs(main.layer_objects) do layer.draw_commands = {} end
-      for _, x in ipairs(main.sound_objects) do x:sound_update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.music_player_objects) do x:music_player_update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.input_objects) do x:input_update(main.rate*main.slow_amount) end
-      main:physics_world_update(main.rate*main.slow_amount)
-      for _, x in ipairs(main.area_objects) do x:area_update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.observer_objects) do x:observer_update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.timer_objects) do x:timer_update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.hitfx_objects) do x:hitfx_update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.shake_objects) do x:shake_update(main.rate*main.slow_amount) end
-      main.camera:camera_update(main.rate*main.slow_amount)
-      main:level_update(main.rate*main.slow_amount)
-      if update then update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.area_objects) do x:area_update_vertices(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.collider_objects) do x:collider_post_update(main.rate*main.slow_amount) end
-      for _, x in ipairs(main.stats_objects) do x:stats_post_update(main.rate*main.slow_amount) end
-      main:physics_world_post_update(main.rate*main.slow_amount)
-      for _, x in ipairs(main.input_objects) do x:input_post_update(main.rate*main.slow_amount) end
+      for _, x in ipairs(main.sound_objects) do x:sound_update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.music_player_objects) do x:music_player_update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.input_objects) do x:input_update(main.rate * main.slow_amount) end
+      main:physics_world_update(main.rate * main.slow_amount)
+      for _, x in ipairs(main.area_objects) do x:area_update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.observer_objects) do x:observer_update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.timer_objects) do x:timer_update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.hitfx_objects) do x:hitfx_update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.shake_objects) do x:shake_update(main.rate * main.slow_amount) end
+      main.camera:camera_update(main.rate * main.slow_amount)
+      main:level_update(main.rate * main.slow_amount)
+      if update then update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.area_objects) do x:area_update_vertices(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.collider_objects) do x:collider_post_update(main.rate * main.slow_amount) end
+      for _, x in ipairs(main.stats_objects) do x:stats_post_update(main.rate * main.slow_amount) end
+      main:physics_world_post_update(main.rate * main.slow_amount)
+      for _, x in ipairs(main.input_objects) do x:input_post_update(main.rate * main.slow_amount) end
       for i = #main.area_objects, 1, -1 do if main.area_objects[i].dead then table.remove(main.area_objects, i) end end
-      for i = #main.collider_objects, 1, -1 do if main.collider_objects[i].dead then table.remove(main.collider_objects, i) end end
+      for i = #main.collider_objects, 1, -1 do
+        if main.collider_objects[i].dead then
+          table.remove(main.collider_objects,
+            i)
+        end
+      end
       for i = #main.input_objects, 1, -1 do if main.input_objects[i].dead then table.remove(main.input_objects, i) end end
       for i = #main.hitfx_objects, 1, -1 do if main.hitfx_objects[i].dead then table.remove(main.hitfx_objects, i) end end
       for i = #main.shake_objects, 1, -1 do if main.shake_objects[i].dead then table.remove(main.shake_objects, i) end end
       for i = #main.timer_objects, 1, -1 do if main.timer_objects[i].dead then table.remove(main.timer_objects, i) end end
       for i = #main.stats_objects, 1, -1 do if main.stats_objects[i].dead then table.remove(main.stats_objects, i) end end
-      for i = #main.observer_objects, 1, -1 do if main.observer_objects[i].dead then table.remove(main.observer_objects, i) end end
+      for i = #main.observer_objects, 1, -1 do
+        if main.observer_objects[i].dead then
+          table.remove(main.observer_objects,
+            i)
+        end
+      end
       main:container_remove_dead_without_destroying()
 
-      main.lag = main.lag - main.rate*main.slow_amount
+      main.lag = main.lag - main.rate * main.slow_amount
     end
 
-    while main.framerate and love.timer.getTime() - last_frame < 1/main.framerate do
+    while main.framerate and love.timer.getTime() - last_frame < 1 / main.framerate do
       love.timer.sleep(.0005)
     end
 
@@ -448,7 +476,7 @@ function love.run()
       love.graphics.origin()
       love.graphics.clear()
       main:draw_all_layers_to_main_layer()
-      main:layer_draw('main', main.rx*0.5, main.ry*0.5, 0, main.sx, main.sy)
+      main:layer_draw('main', main.rx * 0.5, main.ry * 0.5, 0, main.sx, main.sy)
       love.graphics.present()
     end
 
